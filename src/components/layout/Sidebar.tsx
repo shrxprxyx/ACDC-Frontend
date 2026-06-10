@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/",          icon: LayoutDashboard, label: "Command Center" },
-  { href: "/incidents", icon: ShieldAlert,     label: "Incidents",    badge: "3" },
+  { href: "/incidents", icon: ShieldAlert,     label: "Incidents", },
   { href: "/twin",      icon: GitFork,         label: "Digital Twin" },
   { href: "/analytics", icon: BarChart3,       label: "Analytics"    },
   { href: "/agents",    icon: Cpu,             label: "Agents"       },
@@ -50,7 +50,7 @@ export function Sidebar() {
 
       {/* Nav items */}
       <nav className="flex-1 px-2 space-y-0.5 overflow-y-auto pb-2">
-        {nav.map(({ href, icon: Icon, label, badge }) => {
+        {nav.map(({ href, icon: Icon, label }) => {
           const active = pathname === href || (href !== "/" && pathname.startsWith(href));
           return (
             <Link key={href} href={href}
@@ -65,12 +65,6 @@ export function Sidebar() {
               )}
               <Icon className="w-4 h-4 shrink-0" style={{ color: active ? "var(--accent)" : "var(--text-muted)" }} />
               <span className="flex-1">{label}</span>
-              {badge && (
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "var(--red-dim)", color: "var(--red)", border: "1px solid var(--red-border)" }}>
-                  {badge}
-                </span>
-              )}
             </Link>
           );
         })}

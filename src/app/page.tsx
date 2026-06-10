@@ -84,8 +84,8 @@ function CountdownTimer({ createdAt, timeoutSeconds }: { createdAt: Date; timeou
   );
 }
 
-function MetricCard({ icon: Icon, label, value, sub, accentColor }: {
-  icon: React.ElementType; label: string; value: string; sub: string; accentColor: string;
+function MetricCard({ icon: Icon, label, value, accentColor }: {
+  icon: React.ElementType; label: string; value: string; accentColor: string;
 }) {
   return (
     <div className="rounded-lg p-4 flex flex-col gap-3"
@@ -100,7 +100,6 @@ function MetricCard({ icon: Icon, label, value, sub, accentColor }: {
         </div>
       </div>
       <p className="text-2xl font-semibold" style={{ color: "var(--text-primary)" }}>{value}</p>
-      <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>{sub}</p>
     </div>
   );
 }
@@ -150,11 +149,11 @@ export default function CommandCenter() {
 
         {/* metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          <MetricCard icon={ShieldAlert}  label="Active Incidents"  value={String(active.length)}   sub="3 need attention"     accentColor="#c9534f" />
-          <MetricCard icon={Clock}        label="Avg MTTD"          value="2m 14s"                  sub="↓ 18% vs last week"   accentColor="#6b8aad" />
-          <MetricCard icon={Zap}          label="Avg MTTR"          value="11m 42s"                 sub="↓ 31% vs last week"   accentColor="#6b8aad" />
-          <MetricCard icon={CheckCircle2} label="Resolved Today"    value={String(resolved.length)} sub="2 auto-resolved"      accentColor="#3d7a56" />
-          <MetricCard icon={TrendingUp}   label="Auto-Resolve Rate" value="68%"                     sub="↑ 5pts vs last week"  accentColor="#8f7c2a" />
+          <MetricCard icon={ShieldAlert}  label="Active Incidents"  value={String(active.length)}   accentColor="#c9534f" />
+          <MetricCard icon={Clock}        label="Avg MTTD"          value="2m 14s"                  accentColor="#6b8aad" />
+          <MetricCard icon={Zap}          label="Avg MTTR"          value="11m 42s"                 accentColor="#6b8aad" />
+          <MetricCard icon={CheckCircle2} label="Resolved Today"    value={String(resolved.length)} accentColor="#3d7a56" />
+          <MetricCard icon={TrendingUp}   label="Auto-Resolve Rate" value="68%"                     accentColor="#8f7c2a" />
         </div>
 
         {/* pending approvals */}
@@ -247,7 +246,7 @@ export default function CommandCenter() {
               const sev = SEV[inc.severity];
               return (
                 <Link href={`/incidents/${inc.id}`} key={inc.id}
-                  className="grid px-4 py-3.5 items-center transition-colors hover:bg-white/[0.02]"
+                  className="grid px-4 py-3.5 items-center transition-colors hover:bg-white/2"
                   style={{
                     gridTemplateColumns: "1fr 160px 130px 90px 300px 80px",
                     background: idx % 2 === 0 ? "var(--bg-surface)" : "var(--bg-base)",
