@@ -52,14 +52,14 @@ function buildStyle(nodes: TwinNode[]) {
         width: 48,
         height: 48,
         shape: "ellipse",
-        "background-color": "#1c2333",
+        "background-color": "#ffffff",
         "border-width": 2,
-        "border-color": "rgba(255,255,255,0.12)",
+        "border-color": "rgba(0,0,0,0.09)",
         label: "data(label)",
         "text-valign": "bottom",
         "text-halign": "center",
         "font-size": 10,
-        color: "#7a8599",
+        color: "#4b5563",
         "text-margin-y": 6,
         "font-family": "Inter, ui-sans-serif, system-ui, sans-serif",
         "overlay-padding": 6,
@@ -69,8 +69,8 @@ function buildStyle(nodes: TwinNode[]) {
       selector: "edge",
       style: {
         width: 1.5,
-        "line-color": "rgba(255,255,255,0.08)",
-        "target-arrow-color": "rgba(255,255,255,0.08)",
+        "line-color": "rgba(0,0,0,0.10)",
+        "target-arrow-color": "rgba(0,0,0,0.10)",
         "target-arrow-shape": "triangle",
         "curve-style": "bezier",
         opacity: 0.8,
@@ -108,7 +108,7 @@ function buildStyle(nodes: TwinNode[]) {
   // per-node risk colours
   nodes.forEach((n) => {
     const c = RISK_COLOR[n.risk];
-    const bg = n.compromised ? `rgba(224,82,82,0.14)` : `rgba(28,35,51,0.9)`;
+    const bg = n.compromised ? `rgba(224,82,82,0.10)` : `#ffffff`;
     base.push({
       selector: `node[id="${n.id}"]`,
       style: {
@@ -340,10 +340,6 @@ export function DigitalTwinView() {
       <div className="flex items-center justify-between px-6 py-3 shrink-0"
         style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border-subtle)" }}>
         <div>
-          <h1 className="text-[14px] font-semibold" style={{ color: "var(--text-primary)" }}>Digital Twin</h1>
-          <p className="text-[11px]" style={{ color: "var(--text-muted)" }}>
-            Live network topology · Last sync <span className="font-mono">{syncTime}</span>
-          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -399,7 +395,7 @@ export function DigitalTwinView() {
 
       {/* graph canvas */}
       <div className="flex-1 relative overflow-hidden">
-        <div ref={containerRef} className="w-full h-full" />
+        <div ref={containerRef} className="w-full h-full" style={{ background: "var(--bg-elevated)" }} />
 
         {selected && (
           <NodeDetailPanel node={selected} onClose={() => setSelected(null)} />

@@ -7,29 +7,27 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { MOCK_INCIDENTS, MOCK_PENDING_APPROVALS, type Severity, type IncidentStatus } from "@/lib/mock-data";
-import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
 // ── severity config ───────────────────────────────────────────────────────────
 
 const SEV: Record<Severity, { label: string; color: string; bg: string; border: string }> = {
-  CRITICAL: { label: "Critical", color: "#c9534f", bg: "rgba(180,60,60,0.08)",  border: "rgba(180,60,60,0.18)"  },
-  HIGH:     { label: "High",     color: "#b06a2e", bg: "rgba(180,110,50,0.08)", border: "rgba(180,110,50,0.18)" },
-  MEDIUM:   { label: "Medium",   color: "#8f7c2a", bg: "rgba(160,140,50,0.08)", border: "rgba(160,140,50,0.18)" },
-  LOW:      { label: "Low",      color: "#3d7a56", bg: "rgba(50,120,80,0.08)",  border: "rgba(50,120,80,0.18)"  },
+  CRITICAL: { label: "Critical", color: "#b91c1c", bg: "rgba(185,28,28,0.07)",  border: "rgba(185,28,28,0.18)"  },
+  HIGH:     { label: "High",     color: "#b45309", bg: "rgba(180,83,9,0.07)",   border: "rgba(180,83,9,0.18)"   },
+  MEDIUM:   { label: "Medium",   color: "#92700a", bg: "rgba(146,112,10,0.07)", border: "rgba(146,112,10,0.18)" },
+  LOW:      { label: "Low",      color: "#15803d", bg: "rgba(21,128,61,0.07)",  border: "rgba(21,128,61,0.18)"  },
 };
 
 const STATUS_META: Record<IncidentStatus, { label: string; color: string; bg: string; border: string }> = {
-  TRIAGING:         { label: "Triaging",       color: "#6b8aad", bg: "rgba(80,110,160,0.08)",  border: "rgba(80,110,160,0.15)"  },
-  ANALYZING:        { label: "Analyzing",      color: "#6b8aad", bg: "rgba(80,110,160,0.08)",  border: "rgba(80,110,160,0.15)"  },
-  SIMULATING:       { label: "Simulating",     color: "#6b8aad", bg: "rgba(80,110,160,0.08)",  border: "rgba(80,110,160,0.15)"  },
-  PENDING_APPROVAL: { label: "Needs Approval", color: "#8f7c2a", bg: "rgba(160,140,50,0.07)",  border: "rgba(160,140,50,0.18)"  },
-  EXECUTING:        { label: "Executing",      color: "#6b8aad", bg: "rgba(80,110,160,0.08)",  border: "rgba(80,110,160,0.15)"  },
-  RESOLVED:         { label: "Resolved",       color: "#3d7a56", bg: "rgba(50,120,80,0.07)",   border: "rgba(50,120,80,0.15)"   },
-  AUTO_RESOLVED:    { label: "Auto-Resolved",  color: "#3d7a56", bg: "rgba(50,120,80,0.07)",   border: "rgba(50,120,80,0.15)"   },
+  TRIAGING:         { label: "Triaging",       color: "#2563eb", bg: "rgba(37,99,235,0.07)",   border: "rgba(37,99,235,0.18)"   },
+  ANALYZING:        { label: "Analyzing",      color: "#2563eb", bg: "rgba(37,99,235,0.07)",   border: "rgba(37,99,235,0.18)"   },
+  SIMULATING:       { label: "Simulating",     color: "#2563eb", bg: "rgba(37,99,235,0.07)",   border: "rgba(37,99,235,0.18)"   },
+  PENDING_APPROVAL: { label: "Needs Approval", color: "#92700a", bg: "rgba(146,112,10,0.07)",  border: "rgba(146,112,10,0.18)"  },
+  EXECUTING:        { label: "Executing",      color: "#2563eb", bg: "rgba(37,99,235,0.07)",   border: "rgba(37,99,235,0.18)"   },
+  RESOLVED:         { label: "Resolved",       color: "#15803d", bg: "rgba(21,128,61,0.07)",   border: "rgba(21,128,61,0.18)"   },
+  AUTO_RESOLVED:    { label: "Auto-Resolved",  color: "#15803d", bg: "rgba(21,128,61,0.07)",   border: "rgba(21,128,61,0.18)"   },
 };
 
-const AGENT_STAGES = ["Triage", "Threat Intel", "Attack Analysis", "Containment", "Simulation", "Compliance", "Done"];
 
 // ── small components ──────────────────────────────────────────────────────────
 
@@ -74,10 +72,10 @@ function CountdownTimer({ createdAt, timeoutSeconds }: { createdAt: Date; timeou
     <div className="flex items-center gap-2">
       <div className="w-16 h-1 rounded-full overflow-hidden" style={{ background: "var(--border-subtle)" }}>
         <div className="h-full rounded-full transition-all duration-1000"
-          style={{ width: `${pct}%`, background: urgent ? "#c9534f" : "#8f7c2a", opacity: 0.7 }} />
+          style={{ width: `${pct}%`, background: urgent ? "#b91c1c" : "#92700a", opacity: 0.7 }} />
       </div>
       <span className="text-[12px] font-mono tabular-nums"
-        style={{ color: urgent ? "#c9534f" : "var(--text-secondary)" }}>
+        style={{ color: urgent ? "#b91c1c" : "var(--text-secondary)" }}>
         {mins}:{secs.toString().padStart(2, "0")}
       </span>
     </div>
@@ -104,38 +102,6 @@ function MetricCard({ icon: Icon, label, value, accentColor }: {
   );
 }
 
-function AgentPipeline({ stage }: { stage: number }) {
-  return (
-    <div className="flex items-center">
-      {AGENT_STAGES.map((name, i) => {
-        const done   = i < stage;
-        const active = i === stage;
-        return (
-          <div key={name} className="flex items-center">
-            <div className="flex flex-col items-center gap-0.5">
-              <div className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-semibold"
-                style={{
-                  background: done   ? "rgba(60,110,80,0.15)"  : active ? "rgba(59,130,246,0.12)" : "rgba(255,255,255,0.03)",
-                  border:     done   ? "1px solid rgba(60,110,80,0.3)" : active ? "1px solid rgba(59,130,246,0.3)" : "1px solid var(--border-subtle)",
-                  color:      done   ? "#3d7a56" : active ? "var(--accent)" : "var(--text-muted)",
-                }}>
-                {done ? <Check className="w-2.5 h-2.5" /> : i + 1}
-              </div>
-              <span className="text-[8px] whitespace-nowrap"
-                style={{ color: done ? "#3d7a56" : active ? "var(--accent)" : "var(--text-muted)", opacity: done || active ? 1 : 0.5 }}>
-                {name}
-              </span>
-            </div>
-            {i < AGENT_STAGES.length - 1 && (
-              <div className="w-4 h-px mb-3.5"
-                style={{ background: done ? "rgba(60,110,80,0.25)" : "var(--border-subtle)" }} />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 // ── page ──────────────────────────────────────────────────────────────────────
 
@@ -149,23 +115,18 @@ export default function CommandCenter() {
 
         {/* metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          <MetricCard icon={ShieldAlert}  label="Active Incidents"  value={String(active.length)}   accentColor="#c9534f" />
-          <MetricCard icon={Clock}        label="Avg MTTD"          value="2m 14s"                  accentColor="#6b8aad" />
-          <MetricCard icon={Zap}          label="Avg MTTR"          value="11m 42s"                 accentColor="#6b8aad" />
-          <MetricCard icon={CheckCircle2} label="Resolved Today"    value={String(resolved.length)} accentColor="#3d7a56" />
-          <MetricCard icon={TrendingUp}   label="Auto-Resolve Rate" value="68%"                     accentColor="#8f7c2a" />
+          <MetricCard icon={ShieldAlert}  label="Active Incidents"  value={String(active.length)}   accentColor="#b91c1c" />
+          <MetricCard icon={Clock}        label="Avg MTTD"          value="2m 14s"                  accentColor="#2563eb" />
+          <MetricCard icon={Zap}          label="Avg MTTR"          value="11m 42s"                 accentColor="#2563eb" />
+          <MetricCard icon={CheckCircle2} label="Resolved Today"    value={String(resolved.length)} accentColor="#15803d" />
+          <MetricCard icon={TrendingUp}   label="Auto-Resolve Rate" value="68%"                     accentColor="#92700a" />
         </div>
 
         {/* pending approvals */}
         {MOCK_PENDING_APPROVALS.length > 0 && (
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-3.5 h-3.5" style={{ color: "#8f7c2a" }} />
               <h2 className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Pending Approvals</h2>
-              <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold"
-                style={{ background: "rgba(160,140,50,0.08)", color: "#8f7c2a", border: "1px solid rgba(160,140,50,0.2)" }}>
-                {MOCK_PENDING_APPROVALS.length}
-              </span>
             </div>
 
             <div className="space-y-2">
@@ -186,20 +147,16 @@ export default function CommandCenter() {
                         <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>
                           Plan: <span style={{ color: "var(--accent)", opacity: 0.8 }}>{ap.plan}</span>
                         </span>
-                        <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>
-                          Confidence: <span style={{ color: "#3d7a56" }}>{Math.round(ap.confidence * 100)}%</span>
-                        </span>
-                        <CountdownTimer createdAt={ap.createdAt} timeoutSeconds={ap.timeoutSeconds} />
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
                       <button className="flex items-center gap-1.5 px-3 py-1.5 rounded text-[12px] font-medium transition-opacity hover:opacity-80"
-                        style={{ background: "rgba(50,120,80,0.08)", color: "#3d7a56", border: "1px solid rgba(50,120,80,0.2)" }}>
+                        style={{ background: "rgba(21,128,61,0.08)", color: "#15803d", border: "1px solid rgba(21,128,61,0.22)" }}>
                         <Check className="w-3 h-3" /> Approve
                       </button>
                       <button className="flex items-center gap-1.5 px-3 py-1.5 rounded text-[12px] font-medium transition-opacity hover:opacity-80"
-                        style={{ background: "rgba(180,60,60,0.08)", color: "#c9534f", border: "1px solid rgba(180,60,60,0.2)" }}>
+                        style={{ background: "rgba(185,28,28,0.08)", color: "#b91c1c", border: "1px solid rgba(185,28,28,0.22)" }}>
                         <X className="w-3 h-3" /> Reject
                       </button>
                     </div>
@@ -214,9 +171,7 @@ export default function CommandCenter() {
         <section>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Activity className="w-3.5 h-3.5" style={{ color: "var(--text-muted)" }} />
               <h2 className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Live Incident Feed</h2>
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#3d7a56" }} />
             </div>
             <Link href="/incidents" className="flex items-center gap-1 text-[12px] hover:opacity-80 transition-opacity"
               style={{ color: "var(--text-muted)" }}>
@@ -228,7 +183,7 @@ export default function CommandCenter() {
             {/* header */}
             <div className="grid px-4 py-2.5 text-[10px] uppercase tracking-widest font-medium"
               style={{
-                gridTemplateColumns: "1fr 160px 130px 90px 300px 80px",
+                gridTemplateColumns: "2fr 1fr 1fr",
                 background: "var(--bg-surface)",
                 color: "var(--text-muted)",
                 borderBottom: "1px solid var(--border-subtle)",
@@ -236,9 +191,6 @@ export default function CommandCenter() {
               <span>Incident</span>
               <span>Asset</span>
               <span>Status</span>
-              <span>Confidence</span>
-              <span>Agent Pipeline</span>
-              <span>Age</span>
             </div>
 
             {/* rows */}
@@ -246,10 +198,10 @@ export default function CommandCenter() {
               const sev = SEV[inc.severity];
               return (
                 <Link href={`/incidents/${inc.id}`} key={inc.id}
-                  className="grid px-4 py-3.5 items-center transition-colors hover:bg-white/2"
+                  className="grid px-4 py-3.5 items-center transition-colors hover:bg-black/[0.02]"
                   style={{
-                    gridTemplateColumns: "1fr 160px 130px 90px 300px 80px",
-                    background: idx % 2 === 0 ? "var(--bg-surface)" : "var(--bg-base)",
+                    gridTemplateColumns: "2fr 1fr 1fr",
+                    background: idx % 2 === 0 ? "var(--bg-surface)" : "var(--bg-elevated)",
                     borderBottom: "1px solid var(--border-subtle)",
                     borderLeft: `2px solid ${sev.color}`,
                     opacity: inc.status === "RESOLVED" || inc.status === "AUTO_RESOLVED" ? 0.6 : 1,
@@ -270,22 +222,6 @@ export default function CommandCenter() {
                   </span>
 
                   <StatusPill status={inc.status} />
-
-                  <div className="flex items-center gap-2">
-                    <div className="w-12 h-1 rounded-full overflow-hidden" style={{ background: "var(--border-subtle)" }}>
-                      <div className="h-full rounded-full"
-                        style={{ width: `${inc.confidence * 100}%`, background: "var(--text-muted)", opacity: 0.6 }} />
-                    </div>
-                    <span className="text-[11px] font-mono tabular-nums" style={{ color: "var(--text-muted)" }}>
-                      {Math.round(inc.confidence * 100)}%
-                    </span>
-                  </div>
-
-                  <AgentPipeline stage={inc.agentStage} />
-
-                  <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>
-                    {formatDistanceToNow(inc.createdAt, { addSuffix: false })}
-                  </span>
                 </Link>
               );
             })}

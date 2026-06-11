@@ -1,38 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base:        #0f1117;
-  --bg-surface:     #161b27;
-  --bg-elevated:    #1c2333;
-  --bg-hover:       #212840;
+  --bg-base:        #f0f2f7;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #f7f8fc;
+  --bg-hover:       #eaedf5;
 
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-default: rgba(255,255,255,0.09);
-  --border-strong:  rgba(255,255,255,0.14);
+  --border-subtle:  rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.09);
+  --border-strong:  rgba(0,0,0,0.14);
 
-  --text-primary:   #e2e8f0;
-  --text-secondary: #7a8599;
-  --text-muted:     #3d4d63;
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
 
-  --accent:         #3b82f6;
-  --accent-dim:     rgba(59,130,246,0.12);
-  --accent-border:  rgba(59,130,246,0.25);
+  --accent:         #2563eb;
+  --accent-dim:     rgba(37,99,235,0.08);
+  --accent-border:  rgba(37,99,235,0.22);
 
-  --red:            #e05252;
-  --red-dim:        rgba(224,82,82,0.1);
-  --red-border:     rgba(224,82,82,0.2);
+  --red:            #dc2626;
+  --red-dim:        rgba(220,38,38,0.08);
+  --red-border:     rgba(220,38,38,0.2);
 
   --orange:         #d97706;
-  --orange-dim:     rgba(217,119,6,0.1);
+  --orange-dim:     rgba(217,119,6,0.08);
   --orange-border:  rgba(217,119,6,0.2);
 
-  --yellow:         #b59a2e;
-  --yellow-dim:     rgba(181,154,46,0.1);
-  --yellow-border:  rgba(181,154,46,0.2);
+  --yellow:         #92700a;
+  --yellow-dim:     rgba(146,112,10,0.08);
+  --yellow-border:  rgba(146,112,10,0.2);
 
-  --green:          #3d9966;
-  --green-dim:      rgba(61,153,102,0.1);
-  --green-border:   rgba(61,153,102,0.2);
+  --green:          #16a34a;
+  --green-dim:      rgba(22,163,74,0.08);
+  --green-border:   rgba(22,163,74,0.2);
 
   --radius-sm: 6px;
   --radius-md: 8px;

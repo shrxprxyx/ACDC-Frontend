@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Clock, ChevronLeft, Activity, Brain, ListChecks } from "lucide-react";
+import {ChevronLeft, Activity, Brain, ListChecks } from "lucide-react";
 import { IncidentTimeline }     from "./IncidentTimeline";
 import { AgentReasoningChain }  from "./AgentReasoningChain";
 import { ResponsePlanTable }    from "./ResponsePlanTable";
@@ -26,37 +26,6 @@ const SEV_BORDER: Record<string, string> = {
   CRITICAL: "rgba(224,82,82,0.25)",
 };
 
-function CountdownTimer({ deadline }: { deadline: string }) {
-  const [remaining, setRemaining] = useState("");
-  const [urgent, setUrgent]       = useState(false);
-
-  useEffect(() => {
-    const tick = () => {
-      const diff = new Date(deadline).getTime() - Date.now();
-      if (diff <= 0) { setRemaining("Expired"); return; }
-      const m = Math.floor(diff / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      setRemaining(`${m}:${s.toString().padStart(2, "0")}`);
-      setUrgent(diff < 60000);
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [deadline]);
-
-  return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-md text-[12px]"
-      style={{
-        background: urgent ? "var(--red-dim)"    : "var(--yellow-dim)",
-        border:     urgent ? "1px solid var(--red-border)" : "1px solid var(--yellow-border)",
-        color:      urgent ? "var(--red)"         : "var(--yellow)",
-      }}>
-      <Clock className="w-3 h-3 animate-pulse" />
-      <span className="font-mono font-bold">{remaining}</span>
-      <span className="opacity-60 text-[10px]">until default reject</span>
-    </div>
-  );
-}
 
 const TABS = [
   { id: "timeline", label: "Timeline",       icon: Activity   },
@@ -87,7 +56,6 @@ export function IncidentDetailView() {
           <span style={{ color: "var(--border-default)" }}>/</span>
           <span className="text-[12px] font-mono" style={{ color: "var(--text-secondary)" }}>{inc.id}</span>
         </div>
-        <CountdownTimer deadline={inc.approvalDeadline} />
       </div>
 
       <div className="flex-1 p-6 space-y-4 max-w-5xl w-full mx-auto">
@@ -160,7 +128,7 @@ export function IncidentDetailView() {
           style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)" }}>
           {TABS.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setTab(id)}
-              className="flex items-center gap-2 px-4 py-2 rounded-md text-[12px] font-medium transition-all"
+              className="flex cursor-pointer items-center gap-2 px-4 py-2 rounded-md text-[12px] font-medium transition-all"
               style={tab === id
                 ? { background: "var(--bg-elevated)", color: "var(--text-primary)" }
                 : { color: "var(--text-muted)" }}>
